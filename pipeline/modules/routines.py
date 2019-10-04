@@ -93,25 +93,27 @@ def hermitian_matrix():
     f.close()
 
 def apply_ifft2d():
-    csv_full = '/home/hperez/Desktop/co65_grideado/gridded_uv_full.csv'
+    csv_full = '/home/hperez/Desktop/gridded_uv_values.csv'
     with open(csv_full) as f:
         reader = csv.reader(f)
         next(reader) #Only if first line has the data description
         data = [r for r in reader]
     f.close()
 
-    N = 256
-    M = 256
+    N = 512
+    M = 512
 
     deltau = 8.733250 
     deltav = 8.733250 #en co65 
 
     uvgrid = np.zeros((N, M)) + 1j*np.zeros((N, M))
 
+    # print(len(data))
     for i in range(len(data)):
-        u_pixel = int(np.floor(0.5 + float(data[i][0])/deltau) + N/2)
-        v_pixel = int(np.floor(0.5 + float(data[i][1])/deltav) + M/2)
-        uvgrid[v_pixel, u_pixel] += float(data[i][2]) + 1j*float(data[i][3])
+        # u_pixel = int(np.floor(float(data[i][0])/deltau) + N/2)
+        # v_pixel = int(np.floor(float(data[i][1])/deltav) + M/2)
+        # uvgrid[v_pixel][u_pixel] = complex(float(data[i][2]), float(data[i][3]))
+        uvgrid[int(data[i][1])][int(data[i][0])] = complex(float(data[i][2]), float(data[i][3]))
 
     fig = plt.figure()
     ax1 = fig.add_subplot(121)
@@ -123,6 +125,6 @@ def apply_ifft2d():
     plt.show()
 
     dirty_image = np.fft.fftshift(np.fft.ifft2(np.fft.ifftshift(uvgrid)))
-    
-    img = Image.fromarray(dirty_image, 'L')
+
+    img = Image.fromarray(dirty_image.real, 'L')
     img.save('/home/hperez/Desktop/img.png')

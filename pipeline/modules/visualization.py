@@ -101,7 +101,7 @@ def plot_lcurve_iter(dim="2d"):
         sys.exit("Dimension must be '2d' or '3d'.")
 
 def plot_uv_plane_gridded(path=""):
-    path = "/home/hperez/Desktop/gridded_uv_full.csv"
+    path = "/home/hperez/Desktop/co65_grideado/gridded_uv_values2.csv"
 
     x_u = []
     y_v = []
@@ -110,7 +110,7 @@ def plot_uv_plane_gridded(path=""):
 
     with open(path) as f:
         reader = csv.reader(f)
-        next(reader)
+        # next(reader)
         data = [r for r in reader]
 
     for i in range(len(data)):
